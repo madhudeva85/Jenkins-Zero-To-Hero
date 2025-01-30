@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        WORKSPACE_PATH = "C:/Users/madhu/Desktop/Devops/jenkinsworkspace"
+        WORKSPACE_PATH = "/c/Users/madhu/Desktop/Devops/jenkinsworkspace"
         SONAR_URL = "http://localhost:9000"
         GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
         GIT_USER_NAME = "madhudeva85"

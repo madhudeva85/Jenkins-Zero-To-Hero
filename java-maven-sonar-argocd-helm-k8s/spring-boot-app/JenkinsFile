@@ -14,6 +14,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
+        sh 'echo passed'
         //checkout([$class: 'GitSCM', 
                  // branches: [[name: 'main']], 
                   // userRemoteConfigs: [[url: 'https://github.com/madhudeva/Jenkins-Zero-To-Hero.git']]])

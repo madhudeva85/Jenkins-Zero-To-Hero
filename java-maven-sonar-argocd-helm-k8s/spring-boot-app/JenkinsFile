@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        WORKSPACE_DIR_WINDOWS = "C:/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo"
-        WORKSPACE_DIR_UNIX = "/c/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo" // Convert Windows path to Unix path
+        WORKSPACE_DIR_WINDOWS = "C:/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo/java-maven-sonar-argocd-helm-k8s/spring-boot-app"
+        WORKSPACE_DIR_UNIX = "/c/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo/java-maven-sonar-argocd-helm-k8s/spring-boot-app" // Convert Windows path to Unix path
         DOCKER_IMAGE = "abhishekf5/maven-abhishek-docker-agent:v1"
         SONAR_URL = "http://localhost:9000"
         GIT_REPO_NAME = "Jenkins-Zero-To-Hero"

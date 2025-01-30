@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'maven:3.8-openjdk-17-slim'
+      image 'madhudeva/maven'
       args ' -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }

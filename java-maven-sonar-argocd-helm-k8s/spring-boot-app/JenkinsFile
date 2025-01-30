@@ -2,8 +2,7 @@ pipeline {
     agent {
         docker {
             image 'abhishekf5/maven-abhishek-docker-agent:v1'
-            args "-v /c/Users/madhu/Desktop/Devops/jenkinsworkspace:/workspace -w /workspace"
-            args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-v /c/Users/madhu/Desktop/Devops/jenkinsworkspace:/workspace -w /workspace -u root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -18,8 +17,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'echo Checkout stage passed'
-                // git branch: 'main', url: 'https://github.com/madhudeva85/Jenkins-Zero-To-Hero.git'
+                echo "Checkout stage passed"
+                git branch: 'main', url: "https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git"
             }
         }
 
@@ -49,7 +48,7 @@ pipeline {
                         docker build -t ${DOCKER_IMAGE} .
                     '''
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
-                    docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-cred') {
                         dockerImage.push()
                     }
                 }

@@ -17,16 +17,18 @@ pipeline {
         stage('Run Maven with Docker') {
             steps {
                 script {
-                    // Ensure Docker is running with the correct absolute path
+                    // Build the docker run command
                     def dockerRunCommand = """
-                    docker run -d -t --user root -v /var/run/docker.sock:/var/run/docker.sock \
+                    docker run -t --user root -v /var/run/docker.sock:/var/run/docker.sock \
                     -v ${WORKSPACE_DIR_UNIX}:/workspace -w /workspace \
                     -v ${WORKSPACE_DIR_UNIX}@tmp/:${WORKSPACE_DIR_UNIX}@tmp/ \
-                    -e ${env.BUILD_USER} \
-                    ${DOCKER_IMAGE} cmd.exe
+                    -e BUILD_USER=${env.BUILD_USER} \
+                    ${DOCKER_IMAGE} bash -c "mvn clean install"
                     """
 
-                    bat(script: dockerRunCommand, returnStdout: true)
+                    // Run the Docker container and capture output
+                    def result = bat(script: dockerRunCommand, returnStdout: true, returnStderr: true)
+                    echo "Docker Run Result: ${result}"
                 }
             }
         }

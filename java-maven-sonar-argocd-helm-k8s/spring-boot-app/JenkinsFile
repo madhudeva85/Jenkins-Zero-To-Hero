@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        WORKSPACE_DIR = "C:/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo"
+        WORKSPACE_DIR_WINDOWS = "C:/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo"
+        WORKSPACE_DIR_UNIX = "/c/ProgramData/Jenkins/.jenkins/workspace/ultimate-demo" // Convert Windows path to Unix path
         DOCKER_IMAGE = "abhishekf5/maven-abhishek-docker-agent:v1"
     }
 
@@ -19,8 +20,8 @@ pipeline {
                     // Ensure Docker is running with the correct absolute path
                     def dockerRunCommand = """
                     docker run -d -t --user root -v /var/run/docker.sock:/var/run/docker.sock \
-                    -v ${WORKSPACE_DIR}:/workspace -w ${WORKSPACE_DIR} \
-                    -v ${WORKSPACE_DIR}@tmp/:${WORKSPACE_DIR}@tmp/ \
+                    -v ${WORKSPACE_DIR_UNIX}:/workspace -w /workspace \
+                    -v ${WORKSPACE_DIR_UNIX}@tmp/:${WORKSPACE_DIR_UNIX}@tmp/ \
                     -e ${env.BUILD_USER} \
                     ${DOCKER_IMAGE} cmd.exe
                     """

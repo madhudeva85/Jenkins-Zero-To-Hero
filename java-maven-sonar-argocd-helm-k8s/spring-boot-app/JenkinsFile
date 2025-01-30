@@ -47,7 +47,7 @@ pipeline {
         // New Stage: Build and Test
         stage('Build and Test') {
             steps {
-                bat 'ls -ltr'
+              
                 bat 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
             }
         }

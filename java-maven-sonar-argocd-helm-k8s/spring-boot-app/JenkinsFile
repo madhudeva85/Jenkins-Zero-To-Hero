@@ -14,12 +14,13 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-          checkout([$class: 'GitSCM', 
-                    branches: [[name: 'main']], 
-                    userRemoteConfigs: [[
-                      url: "https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git"
-                    ]]])
+        sh 'echo passed'
+        //withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+          //checkout([$class: 'GitSCM', 
+                    //branches: [[name: 'main']], 
+                    //userRemoteConfigs: [[
+                     // url: "https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git"
+                   // ]]])
         }
       }
     }

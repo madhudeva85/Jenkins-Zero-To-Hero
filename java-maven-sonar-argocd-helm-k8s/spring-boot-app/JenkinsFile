@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+        git branch: 'main', url: 'https://github.com/madhudeva85/Jenkins-Zero-To-Hero.git'
       }
     }
     stage('Build and Test') {
@@ -21,7 +21,7 @@ pipeline {
     }
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://172.21.240.50:9000"
+        SONAR_URL = "http://172.21.240.50:9000/"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -45,38 +45,24 @@ pipeline {
         }
       }
     }
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: 'main']], // Replace 'main' with your branch name
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/madhudeva85/Jenkins-Zero-To-Hero.git',
-                        credentialsId: 'github-token' // Use the credentials ID for your GitHub token
-                    ]]
-                ])
-            }
+    stage('Update Deployment File') {
+        environment {
+            GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
+            GIT_USER_NAME = "madhudeva85"
         }
-
-        stage('Update Deployment') {
-            steps {
-                script {
-                    // Configure Git user
-                    sh 'git config user.email "madhudeva@gmail.com"'
-                    sh 'git config user.name "Madhu Deva"'
-
-                    // Update the deployment.yml file
-                    sh 'sed -i s/replaceImageTag/${BUILD_NUMBER}/g java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml'
-
-                    // Stage and commit changes
-                    sh 'git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml'
-                    sh 'git commit -m "Update deployment image to version ${BUILD_NUMBER}"'
-
-                    // Push changes to the remote repository
-                    sh 'git push origin main' // Replace 'main' with your branch name
-                }
+        steps {
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git config user.email "amadhudeva@gmail.com"
+                    git config user.name "madhudeva"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+                    git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
             }
         }
     }
+  }
 }
